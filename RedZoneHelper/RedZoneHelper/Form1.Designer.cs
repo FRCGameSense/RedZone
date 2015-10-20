@@ -52,7 +52,7 @@
             this.yearBox.Size = new System.Drawing.Size(48, 20);
             this.yearBox.TabIndex = 0;
             this.yearBox.Value = new decimal(new int[] {
-            2014,
+            2015,
             0,
             0,
             0});
@@ -72,7 +72,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(13, 56);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(240, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(1008, 545);
             this.dataGridView1.TabIndex = 2;
             // 
             // Form1

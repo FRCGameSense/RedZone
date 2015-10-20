@@ -136,6 +136,42 @@ namespace RedZoneHelper
             public List<MatchResultsTeam> teams { get; set; }
 
             public MatchResult() { }
+
+            public string RedAllianceString
+            {
+                get
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (MatchResultsTeam t in teams)
+                    {
+                        if (t.station.StartsWith("R"))
+                        {
+                            sb.AppendFormat("{0},", t.teamNumber);
+                        }
+                    }
+                    string alliance = sb.ToString();
+                    return alliance.Substring(0, alliance.Length - 2);
+                }
+            }
+
+            public string BlueAllianceString
+            {
+                get
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (MatchResultsTeam t in teams)
+                    {
+                        if (t.station.StartsWith("B"))
+                        {
+                            sb.AppendFormat("{0},", t.teamNumber);
+                        }
+                    }
+                    string alliance = sb.ToString();
+                    return alliance.Substring(0, alliance.Length - 2);
+                }
+            }
         }
 
         /// <summary>
