@@ -60,6 +60,13 @@ namespace RedZoneHelper
             return api_response;
         }
 
+        /// <summary>
+        /// Gets the score details for the given season, event, and tournament level
+        /// </summary>
+        /// <param name="season">Season</param>
+        /// <param name="eventCode">Event</param>
+        /// <param name="tournamentLevel">Level</param>
+        /// <returns></returns>
         public List<ScoreDetails> getScoreDetails(int season, string eventCode, string tournamentLevel)
         {
             string uri = baseUrl + "/" + season.ToString() + "/scores/" + eventCode + "/" + tournamentLevel;
@@ -75,6 +82,22 @@ namespace RedZoneHelper
                 return null;
             }
             
+        }
+
+        public List<HybridScheduleMatch> getHybridSchedule(int season, string eventCode, string tournamentLevel)
+        {
+            string uri = baseUrl + "/" + season.ToString() + "/schedule/" + eventCode + "/" + tournamentLevel + "/hybrid";
+            string api_response = communicator.sendAndGetRawResponse(uri);
+            //Console.WriteLine(api_response);
+            if (api_response != null)
+            {
+                List<HybridScheduleMatch> hybridSchedule = JsonConvert.DeserializeObject<HybridSchedule>(api_response).Schedule;
+                return hybridSchedule;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -106,6 +129,86 @@ namespace RedZoneHelper
             public int eventCount  { get; set; }
 
             public EventsList() { }
+        }
+
+        /// <summary>
+        /// Holder for the hybrid schedule for the FRC API
+        /// </summary>
+        public class HybridSchedule
+        {
+            public List<HybridScheduleMatch> Schedule { get; set; }
+
+            public HybridSchedule() { }
+        }
+
+        /// <summary>
+        /// A hybrid schedule model for the FRC API
+        /// </summary>
+        public class HybridScheduleMatch
+        {
+            public DateTime actualStartTime { get; set; }
+            public string description { get; set; }
+            public int matchNumber { get; set; }
+            public int scoreRedFinal { get; set; }
+            public int scoreRedFoul { get; set; }
+            public int scoreRedAuto { get; set; }
+            public int scoreBlueFinal { get; set; }
+            public int scoreBlueFoul { get; set; }
+            public int scoreBlueAuto { get; set; }
+            public DateTime startTime { get; set; }
+            public string tournamentLevel { get; set; }
+            List<HybridScheduleTeam> Teams { get; set; }
+
+            public HybridScheduleMatch() { }
+
+            public string RedAllianceString
+            {
+                get
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (HybridScheduleTeam t in Teams)
+                    {
+                        if (t.station.StartsWith("R"))
+                        {
+                            sb.AppendFormat("{0},", t.teamNumber);
+                        }
+                    }
+                    string alliance = sb.ToString();
+                    return alliance.Substring(0, alliance.Length - 2);
+                }
+            }
+
+            public string BlueAllianceString
+            {
+                get
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (HybridScheduleTeam t in Teams)
+                    {
+                        if (t.station.StartsWith("B"))
+                        {
+                            sb.AppendFormat("{0},", t.teamNumber);
+                        }
+                    }
+                    string alliance = sb.ToString();
+                    return alliance.Substring(0, alliance.Length - 2);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Team model for hybrid schedule from the FRC API
+        /// </summary>
+        public class HybridScheduleTeam
+        {
+            public int? teamNumber { get; set; }
+            public string station { get; set; }
+            public bool surrogate { get; set; }
+            public bool dq { get; set; }
+
+            public HybridScheduleTeam() { }
         }
 
         /// <summary>
